@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<!--
+╔══════════════════════════════════════════════════════════╗
+║              مشروع : التّعلّم الممتع                    ║
+║        نسخة : تعلُّم الحروف — النّسخة ٦                ║
+║           المبتكرة : سميرة عبد الصّدوق                  ║
+║           جميع الحقوق محفوظة 2026                       ║
+╚══════════════════════════════════════════════════════════╝
+-->
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>تعلم الحروف — رنيم فاي</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+body{
+  font-family:'Tajawal',sans-serif;
+  min-height:100vh;overflow-x:hidden;
+  background:linear-gradient(180deg,#a0d8f8 0%,#c8eeff 30%,#d8f9c0 65%,#a4e080 100%);
+}
+
+/* ─── خلفية السماء ─── */
+.bg-sky{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+
+.sun{
+  position:absolute;top:14px;left:14px;
+  width:74px;height:74px;border-radius:50%;
+  background:radial-gradient(circle at 38% 36%,#fffaaa,#ffe53b 50%,#ffb700);
+  box-shadow:0 0 0 14px rgba(255,220,0,.20),0 0 0 28px rgba(255,200,0,.10);
+  animation:sunPulse 3.5s ease-in-out infinite;
+  z-index:1;
+}
+.sun-rays{
+  position:absolute;top:-1px;left:-1px;
+  width:76px;height:76px;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(255,230,0,.35) 0deg 12deg,transparent 12deg 24deg);
+  animation:sunSpin 16s linear infinite;
+}
+@keyframes sunPulse{
+  0%,100%{box-shadow:0 0 0 14px rgba(255,220,0,.20),0 0 0 28px rgba(255,200,0,.10)}
+  50%    {box-shadow:0 0 0 20px rgba(255,220,0,.15),0 0 0 40px rgba(255,200,0,.07)}
+}
+@keyframes sunSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+.cloud{
+  position:absolute;background:#fff;border-radius:60px;opacity:.90;
+  animation:cloudDrift var(--cd,26s) linear infinite;
+  filter:drop-shadow(0 4px 8px rgba(140,190,230,.30));
+}
+.cloud b{position:absolute;background:#fff;border-radius:50%;display:block}
+@keyframes cloudDrift{from{transform:translateX(110vw)}to{transform:translateX(-300px)}}
+
+.floaty{position:absolute;font-size:26px;animation:floatAcross var(--fd,15s) linear infinite;opacity:.80}
+@keyframes floatAcross{
+  0%  {transform:translateX(108vw) translateY(0)}
+  50% {transform:translateX(54vw)  translateY(-28px)}
+  100%{transform:translateX(-90px) translateY(6px)}
+}
+
+/* ─── wrapper ─── */
+.app{
+  position:relative;z-index:1;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:12px 12px 28px;
+}
+
+/* ─── رأس الصفحة ─── */
+.site-header{
+  width:100%;max-width:430px;text-align:center;
+  padding:10px 12px 12px;margin-bottom:8px;
+  background:rgba(255,255,255,.45);backdrop-filter:blur(6px);
+  border-radius:22px;border:2.5px solid rgba(255,255,255,.80);
+  box-shadow:0 4px 18px rgba(80,160,220,.18);
+}
+.site-name{font-family:'Fredoka One',cursive;font-size:24px;color:#c84000;letter-spacing:3px;text-shadow:1px 2px 0 rgba(255,255,255,.95)}
+.sep{color:#f0a000;font-size:20px;margin:0 6px}
+.site-sub{font-family:'Fredoka One',cursive;font-size:22px;color:#1e7828;letter-spacing:3px;text-shadow:1px 2px 0 rgba(255,255,255,.95)}
+
+/* ─── شريط علوي ─── */
+.top-bar{width:100%;max-width:430px;display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;margin-top:4px}
+.app-title{font-family:'Fredoka One',cursive;font-size:21px;color:#c84000;text-shadow:1px 2px 0 rgba(255,255,255,.85)}
+.badge{background:linear-gradient(135deg,#ff9a3c,#c84000);border-radius:22px;padding:5px 15px;font-size:15px;font-weight:700;color:#fff;box-shadow:0 4px 0 rgba(160,50,0,.32)}
+
+/* ─── شريط التقدم ─── */
+.prog-track{width:100%;max-width:430px;height:16px;background:rgba(255,255,255,.68);border-radius:99px;overflow:hidden;margin-bottom:11px;border:2.5px solid rgba(255,255,255,.90);box-shadow:inset 0 2px 5px rgba(0,0,0,.09)}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#55c45e,#f8d000,#ff8a32);transition:width .65s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 10px rgba(90,200,100,.45)}
+
+/* ─── البطاقة ─── */
+.card{
+  width:100%;max-width:430px;
+  background:linear-gradient(160deg,#fffef0 0%,#fff8e1 50%,#ffffff 100%);
+  border-radius:32px;border:4px solid #ffe564;
+  box-shadow:0 8px 0 #f0a200, 0 14px 32px rgba(0,0,0,.14);
+  padding:18px 16px 16px;
+  display:flex;flex-direction:column;align-items:center;
+  position:relative;overflow:hidden;
+}
+.card::before{content:'★';position:absolute;top:10px;right:14px;font-size:28px;color:rgba(255,200,0,.40);pointer-events:none;animation:starTwirl 4s ease-in-out infinite}
+.card::after{content:'★';position:absolute;top:10px;left:14px;font-size:22px;color:rgba(255,180,0,.30);pointer-events:none;animation:starTwirl 4s ease-in-out infinite reverse}
+@keyframes starTwirl{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(20deg) scale(1.2)}}
+
+/* ─── دائرة الحرف ─── */
+.letter-ring{
+  width:108px;height:108px;border-radius:50%;
+  background:linear-gradient(135deg,#ffe844,#ff9042,#ff4fa0);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 7px 0 #b84a00, 0 10px 26px rgba(0,0,0,.18);
+  animation:ringFloat 2.8s ease-in-out infinite;
+  position:relative;
+}
+.letter-ring::before{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  background:conic-gradient(rgba(255,240,60,.50),rgba(255,140,60,.40),rgba(255,70,160,.40),rgba(255,240,60,.50));
+  animation:haloSpin 3.6s linear infinite;
+}
+@keyframes ringFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.03)}}
+@keyframes haloSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.letter-big{font-family:'Fredoka One',cursive;font-size:64px;color:#fff;line-height:1;text-shadow:2px 4px 0 rgba(0,0,0,.22);position:relative;z-index:1}
+
+/* ─── دائرة الإيموجي ─── */
+.emoji-circle{
+  width:150px;height:150px;border-radius:50%;
+  background:linear-gradient(135deg,#e8fff0,#e4f4ff);
+  border:4px solid #90d8a0;
+  display:flex;align-items:center;justify-content:center;
+  margin:12px 0 10px;
+  box-shadow:0 6px 0 #5ab870, 0 10px 22px rgba(0,0,0,.12);
+  animation:emojiFloat 3.8s ease-in-out infinite;
+  position:relative;
+}
+@keyframes emojiFloat{
+  0%,100%{transform:translateY(0) rotate(0)}
+  45%    {transform:translateY(-10px) rotate(1.5deg)}
+  75%    {transform:translateY(-5px) rotate(-1.5deg)}
+}
+.emoji-main{
+  font-size:88px;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.18));
+  line-height:1;
+  /* تكبير الإيموجي وإخراج النص اللاتيني */
+  font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;
+}
+.emoji-main.bounce{animation:eBounce .55s ease}
+.emoji-main.shake {animation:eShake .45s ease}
+@keyframes eBounce{0%{transform:scale(1)}35%{transform:scale(1.5) rotate(10deg)}65%{transform:scale(.88) rotate(-5deg)}100%{transform:scale(1)}}
+@keyframes eShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-14px)}40%{transform:translateX(14px)}60%{transform:translateX(-9px)}80%{transform:translateX(9px)}}
+
+/* ─── صندوق الكلمة ─── */
+.word-box{background:linear-gradient(135deg,#fff9b0,#fff2d0);border:3px solid #ffe060;border-radius:18px;padding:8px 28px;margin-bottom:9px;box-shadow:0 4px 0 #f0a000}
+.word-text{font-family:'Fredoka One',cursive;font-size:42px;color:#2c3a48;letter-spacing:4px}
+.word-text .hl{color:#c84000;font-size:56px;animation:glowHL 2.2s ease-in-out infinite alternate}
+@keyframes glowHL{from{text-shadow:1px 1px 0 rgba(180,50,0,.30)}to{text-shadow:2px 2px 12px rgba(210,60,0,.75)}}
+
+/* ─── رسائل ─── */
+.msg{width:100%;min-height:44px;text-align:center;border-radius:14px;padding:9px 12px;font-size:16px;font-weight:700;margin:5px 0;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .3s;line-height:1.4}
+.msg.info   {background:#ddf2ff;color:#0a4e94;border:2px solid #7ac8ff}
+.msg.success{background:#e2f9e5;color:#1a5222;border:2px solid #7dd68a}
+.msg.error  {background:#fde4ec;color:#8f1020;border:2px solid #f4849e}
+
+/* ─── أزرار ─── */
+.btn-row{display:flex;gap:10px;width:100%;margin-top:6px}
+.btn{flex:1;padding:14px 6px;border:none;border-radius:16px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;transition:transform .12s,box-shadow .12s}
+.btn:active{transform:translateY(5px) !important}
+.btn .ico{font-size:26px}
+.btn-hear{background:linear-gradient(135deg,#ffe040,#ff8c32);box-shadow:0 6px 0 #aa5200}
+.btn-hear:active{box-shadow:0 1px 0 #aa5200}
+.btn-mic{background:linear-gradient(135deg,#30d0e8,#0096a0);box-shadow:0 6px 0 #006370}
+.btn-mic:active{box-shadow:0 1px 0 #006370}
+.btn-mic.on{background:linear-gradient(135deg,#f25050,#c02020);box-shadow:0 6px 0 #7a0000;animation:micBlink 1s infinite}
+@keyframes micBlink{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
+.btn-next{background:linear-gradient(135deg,#64cc68,#2c7830);box-shadow:0 6px 0 #1a4e20}
+.btn-next:active{box-shadow:0 1px 0 #1a4e20}
+
+/* ─── شريط النجوم ─── */
+.stars{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.sd{width:23px;height:23px;border-radius:50%;background:#e2e2e2;border:1.5px solid #c0c0c0;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:#888;transition:all .4s}
+.sd.done{background:linear-gradient(135deg,#ffe040,#ff8a32);border-color:#ff8a32;color:#fff;box-shadow:0 0 9px rgba(255,150,0,.60);animation:sPop .4s ease}
+.sd.now{border-color:#28c8e0;background:#d8f6fc;color:#006070;animation:nowGlow 1.2s ease-in-out infinite}
+@keyframes sPop{0%{transform:scale(.4) rotate(-180deg)}70%{transform:scale(1.38) rotate(10deg)}100%{transform:scale(1)}}
+@keyframes nowGlow{0%,100%{box-shadow:0 0 0 0 rgba(40,200,220,.45)}50%{box-shadow:0 0 0 5px rgba(40,200,220,.15)}}
+
+.notice{font-size:12px;color:#777;margin-top:5px;text-align:center}
+
+/* ─── كونفيتي ─── */
+.conf{position:absolute;opacity:0;pointer-events:none}
+@keyframes confFall{0%{transform:translateY(-22px) rotate(0);opacity:1}100%{transform:translateY(145px) rotate(740deg);opacity:0}}
+
+/* ─── شاشة النهاية ─── */
+#finalScreen{display:none;flex-direction:column;align-items:center;gap:18px;width:100%;max-width:430px;text-align:center}
+.trophy{font-size:110px;animation:tPop .9s cubic-bezier(.34,1.56,.64,1);filter:drop-shadow(0 5px 14px rgba(255,160,0,.45))}
+@keyframes tPop{from{transform:scale(0) rotate(-360deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.final-h{font-family:'Fredoka One',cursive;font-size:29px;color:#c84000;text-shadow:2px 2px 0 rgba(255,255,255,.85)}
+.final-sub{font-size:18px;color:#1a5222;font-weight:700}
+.btn-restart{padding:16px 44px;font-family:'Tajawal',sans-serif;font-size:21px;font-weight:700;border:none;border-radius:22px;cursor:pointer;background:linear-gradient(135deg,#64cc68,#2c7830);color:#fff;box-shadow:0 7px 0 #1a4e20}
+.btn-restart:active{transform:translateY(4px);box-shadow:0 3px 0 #1a4e20}
+
+/* ─── تذييل ─── */
+.site-footer{width:100%;max-width:430px;text-align:center;margin-top:22px;padding:14px 0 8px;border-top:3px dashed rgba(255,140,0,.38)}
+.footer-name{font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;color:#1e7828}
+.footer-rights{font-size:13px;font-weight:700;color:#c84000;margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="bg-sky" id="bgSky">
+  <div class="sun"><div class="sun-rays"></div></div>
+</div>
+
+<div class="app">
+
+  <div class="site-header">
+    <span class="site-name">رنيم فاي</span>
+    <span class="sep">✦</span>
+    <span class="site-sub">التعلم الممتع</span>
+  </div>
+
+  <div class="top-bar">
+    <div class="app-title">☀️ تعلَّم الحروف</div>
+    <div class="badge" id="badge">١ / ٢٨</div>
+  </div>
+
+  <div class="prog-track">
+    <div class="prog-fill" id="progFill" style="width:3.6%"></div>
+  </div>
+
+  <div class="card" id="mainCard">
+    <div class="letter-ring"><span class="letter-big" id="lBig">أ</span></div>
+
+    <div class="emoji-circle" id="emojiCircle">
+      <span class="emoji-main" id="eMoji">🐰</span>
+    </div>
+
+    <div class="word-box"><div class="word-text" id="wText"></div></div>
+    <div class="msg info" id="msgBox">اضغط «اسمع» ثم قل اسم الصورة 🎯</div>
+
+    <div class="btn-row">
+      <button class="btn btn-hear" onclick="hearWord()"><span class="ico">🔊</span>اسمع</button>
+      <button class="btn btn-mic"  id="micBtn" onclick="startListen()"><span class="ico">🎤</span>تكلَّم</button>
+      <button class="btn btn-next" onclick="nextLetter()"><span class="ico">▶</span>التالي</button>
+    </div>
+
+    <div class="notice" id="notice"></div>
+    <div class="stars"  id="starsRow"></div>
+  </div>
+
+  <div id="finalScreen">
+    <div class="trophy">🏆</div>
+    <div class="final-h">رائع! أتممتَ جميع الحروف!</div>
+    <div class="final-sub" id="finalSub"></div>
+    <div class="stars" id="finalStars"></div>
+    <button class="btn-restart" onclick="restart()">🔄 العب من جديد</button>
+  </div>
+
+  <div class="site-footer">
+    <div class="footer-name">سميرة عبد الصّدوق</div>
+    <div class="footer-rights">جميع الحقوق محفوظة © 2026</div>
+  </div>
+
+</div>
+
+<script>
+/* ================================================================
+   بيانات الحروف الـ 28
+   - ر → رُمَّان  (لا تكرار مع الواو)
+   - و → وَرْدَة
+   - إيموجي واضحة كبيرة بدلاً من SVG
+   ================================================================ */
+const DATA = [
+  {l:"أ",  e:"🐰", w:"أَرْنَب",  ws:"أرنب",   tts:"أرنب",    a:["أرنب","ارنب","الأرنب"]},
+  {l:"ب",  e:"🦆", w:"بَطَّة",   ws:"بطة",    tts:"بطّة",    a:["بطة","البطة","بط","بطه"]},
+  {l:"ت",  e:"🍎", w:"تُفَّاحَة",ws:"تفاحة",  tts:"تفّاحة",  a:["تفاحة","التفاحة","تفاح"]},
+  {l:"ث",  e:"🦊", w:"ثَعْلَب",  ws:"ثعلب",   tts:"ثعلب",    a:["ثعلب","الثعلب","ثعالب"]},
+  {l:"ج",  e:"🔔", w:"جَرَس",    ws:"جرس",    tts:"جرس",     a:["جرس","الجرس","جراس"]},
+  {l:"ح",  e:"🐴", w:"حِصَان",   ws:"حصان",   tts:"حصان",    a:["حصان","الحصان","خيل"]},
+  {l:"خ",  e:"🍞", w:"خُبْز",    ws:"خبز",    tts:"خبز",     a:["خبز","الخبز","خبزة"]},
+  {l:"د",  e:"🪱", w:"دُودَة",   ws:"دودة",   tts:"دودة",    a:["دودة","الدودة","دود","دوده"]},
+  {l:"ذ",  e:"🪰", w:"ذُبَابَة",  ws:"ذبابة",  tts:"ذبابة",   a:["ذبابة","الذبابة","ذباب","ذبابه"]},
+  {l:"ر",  e:"✉️", w:"رِسَالَة", ws:"رسالة",  tts:"رسالة",   a:["رسالة","الرسالة","رساله"]},
+  {l:"ز",  e:"🌸", w:"زَهْرَة",  ws:"زهرة",   tts:"زهرة",    a:["زهرة","الزهرة","زهر"]},
+  {l:"س",  e:"🐟", w:"سَمَكَة",  ws:"سمكة",   tts:"سمكة",    a:["سمكة","السمكة","سمك"]},
+  {l:"ش",  e:"🌳", w:"شَجَرَة",  ws:"شجرة",   tts:"شجرة",    a:["شجرة","الشجرة","شجر"]},
+  {l:"ص",  e:"🦅", w:"صَقْر",    ws:"صقر",    tts:"صقر",     a:["صقر","الصقر","صقور"]},
+  {l:"ض",  e:"🦷", w:"ضِرْس",    ws:"ضرس",    tts:"ضِرس",    a:["ضرس","الضرس","ضروس"]},
+  {l:"ط",  e:"✈️", w:"طَائِرَة", ws:"طائرة",  tts:"طائرة",   a:["طائرة","الطائرة","طيارة"]},
+  {l:"ظ",  e:"🦌", w:"ظَبْي",    ws:"ظبي",    tts:"ظبي",     a:["ظبي","الظبي","ظباء"]},
+  {l:"ع",  e:"🍯", w:"عَسَلٌ",    ws:"عسل",    tts:"عسل",     a:["عسل","العسل"]},
+  {l:"غ",  e:"🦌", w:"غَزَالَة", ws:"غزالة",  tts:"غزالة",   a:["غزالة","الغزالة","غزال","غزاله"]},
+  {l:"ف",  e:"🦋", w:"فَرَاشَة", ws:"فراشة",  tts:"فراشة",   a:["فراشة","الفراشة","فراش"]},
+  {l:"ق",  e:"✏️", w:"قَلَمٌ",    ws:"قلم",    tts:"قلم",     a:["قلم","القلم","أقلام"]},
+  {l:"ك",  e:"🐶", w:"كَلْب",    ws:"كلب",    tts:"كلب",     a:["كلب","الكلب","كلاب"]},
+  {l:"ل",  e:"🍋", w:"لَيْمُون", ws:"ليمون",  tts:"ليمون",   a:["ليمون","الليمون","ليمونة"]},
+  {l:"م",  e:"⛵", w:"مَرْكِبٌ",  ws:"مركب",   tts:"مركب",    a:["مركب","المركب","مراكب"]},
+  {l:"ن",  e:"🐝", w:"نَحْلَة",  ws:"نحلة",   tts:"نحلة",    a:["نحلة","النحلة","نحل"]},
+  {l:"هـ", e:"🌙", w:"هِلَال",   ws:"هلال",   tts:"هلال",    a:["هلال","الهلال"]},
+  {l:"و",  e:"🌹", w:"وَرْدَة",  ws:"وردة",   tts:"وردة",    a:["وردة","الوردة","ورد","زهرة"]},
+  {l:"ي",  e:"🤚", w:"يَد",      ws:"يد",     tts:"يد",      a:["يد","اليد","يدي"]},
+];
+
+
+
+const CLR=["#ff6b6b","#ffd93d","#6bcb77","#4d96ff","#ff922b","#a855f7","#26c6da","#f472b6"];
+let cur=0, scores=new Array(DATA.length).fill(false);
+let rec=null, micOK=false, listening=false;
+
+/* ── بناء السماء ── */
+(function(){
+  const sky=document.getElementById('bgSky');
+  [{w:138,h:50,t:7,dl:0,du:27},{w:98,h:40,t:20,dl:10,du:22},
+   {w:158,h:60,t:4,dl:16,du:33},{w:88,h:34,t:29,dl:6,du:24},
+   {w:118,h:46,t:13,dl:20,du:30}].forEach(c=>{
+    const el=document.createElement('div');
+    el.className='cloud';
+    el.style.cssText=`width:${c.w}px;height:${c.h}px;top:${c.t}%;right:-${c.w+10}px;--cd:${c.du}s;animation-delay:-${c.dl}s`;
+    ['b','b'].forEach((_,i)=>{
+      const b=document.createElement('b');
+      if(i===0) b.style.cssText=`width:${c.w*.5}px;height:${c.h*1.5}px;top:-${c.h*.55}px;right:${c.w*.12}px`;
+      else       b.style.cssText=`width:${c.w*.38}px;height:${c.h*1.3}px;top:-${c.h*.35}px;right:${c.w*.44}px`;
+      el.appendChild(b);
+    });
+    sky.appendChild(el);
+  });
+  [["🌈",8,16],["🌸",22,13],["⭐",38,15],["🦋",54,12],["🌻",68,17]].forEach(([em,top,du])=>{
+    const el=document.createElement('div');
+    el.className='floaty'; el.textContent=em;
+    el.style.cssText=`top:${top}%;--fd:${du}s;animation-delay:-${Math.random()*du}s`;
+    sky.appendChild(el);
+  });
+})();
+
+/* ── ميكروفون ── */
+function initMic(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ noMicNotice(); return; }
+  try{
+    rec=new SR();
+    rec.lang='ar-SA'; rec.continuous=false; rec.interimResults=false; rec.maxAlternatives=6;
+    rec.onresult=onResult; rec.onerror=onErr;
+    rec.onend=()=>{ listening=false; resetMic(); };
+    micOK=true;
+    document.getElementById('notice').textContent='✅ الميكروفون جاهز';
+  }catch(e){ noMicNotice(); }
+}
+
+function noMicNotice(){
+  micOK=false;
+  document.getElementById('micBtn').disabled=true;
+  document.getElementById('micBtn').style.opacity='0.4';
+  document.getElementById('notice').textContent='⚠️ الميكروفون غير متاح في هذا المتصفح';
+  setMsg('اضغط «اسمع» واستمع جيداً، ثم اضغط التالي 🎧','info');
+}
+
+function startListen(){
+  if(!micOK) return;
+  if(listening){ rec.stop(); return; }
+  listening=true;
+  const b=document.getElementById('micBtn');
+  b.classList.add('on'); b.innerHTML='<span class="ico">⏹</span>إيقاف';
+  setMsg('أنا أسمعك… قل اسم الصورة 👂','info');
+  try{ rec.start(); }catch(e){ listening=false; resetMic(); }
+}
+
+function onResult(ev){
+  const all=Array.from({length:ev.results[0].length},(_,i)=>ev.results[0][i].transcript.trim());
+  if(all.some(t=>DATA[cur].a.some(a=>t.includes(a)))){
+    good();
+  } else {
+    bad(`لم أسمع "${DATA[cur].ws}" — قلتَ: "${all[0]}" — حاوِل مرّة أخرى!`);
+  }
+}
+
+function onErr(e){
+  listening=false; resetMic();
+  if(e.error==='not-allowed'){
+    setMsg('🚫 لم يُسمح بالميكروفون','error');
+    noMicNotice();
+  } else if(e.error==='no-speech'){
+    setMsg('لم أسمع صوتاً — حاوِل مرّة أخرى 🎤','error');
+  } else {
+    setMsg('خطأ في الميكروفون: '+e.error,'error');
+  }
+}
+
+function resetMic(){
+  const b=document.getElementById('micBtn');
+  b.classList.remove('on'); b.innerHTML='<span class="ico">🎤</span>تكلَّم';
+}
+
+/* ── إجابة صحيحة / خاطئة ── */
+function good(){
+  scores[cur]=true; updateStars();
+  setMsg(`🎉 أحسنتِ! "${DATA[cur].ws}" تبدأ بحرف ${DATA[cur].l}`,'success');
+  animEmoji('bounce'); confetti();
+  speak(`أحسنتِ يا نجمة! ${DATA[cur].ws}`);
+}
+function bad(m){ setMsg(m,'error'); animEmoji('shake'); }
+
+/* ── عرض الحرف الحالي ── */
+function showCur(){
+  const D=DATA[cur];
+  document.getElementById('lBig').textContent=D.l;
+  /* إيموجي */
+  const em=document.getElementById('eMoji');
+  em.textContent=D.e; em.className='emoji-main';
+  /* كلمة مشكّلة مع تمييز الحرف الأول */
+  const letters=[...D.w];
+  document.getElementById('wText').innerHTML=
+    `<span class="hl">${letters[0]}</span>${letters.slice(1).join('')}`;
+  const pct=((cur+1)/DATA.length*100).toFixed(1);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('badge').textContent=`${ar(cur+1)} / ${ar(DATA.length)}`;
+  setMsg('اضغط «اسمع» ثم قل اسم الصورة 🎯','info');
+  updateStars();
+}
+
+function ar(n){return String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);}
+
+/* ── اختيار أفضل صوت عربي متاح ── */
+let bestVoice = null;
+function pickVoice(){
+  const voices = speechSynthesis.getVoices();
+  /* أفضلية: صوت ar-SA ثم ar عموماً */
+  bestVoice =
+    voices.find(v=>v.lang==='ar-SA') ||
+    voices.find(v=>v.lang.startsWith('ar')) ||
+    null;
+}
+if(window.speechSynthesis){
+  speechSynthesis.onvoiceschanged = pickVoice;
+  pickVoice();
+}
+
+/* ── نطق نص واحد بإعدادات محسَّنة ── */
+function utter(text, rate=0.72, pitch=1.08, cb=null){
+  if(!window.speechSynthesis) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang    = 'ar-SA';
+  u.rate    = rate;
+  u.pitch   = pitch;
+  u.volume  = 1;
+  if(bestVoice) u.voice = bestVoice;
+  if(cb) u.onend = cb;
+  speechSynthesis.speak(u);
+}
+
+/* ── زر اسمع: الكلمة مرّتين بفاصل ── */
+function hearWord(){
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const word = DATA[cur].tts;
+  setMsg(`استمِع جيداً ← ${DATA[cur].ws} 🔊`, 'info');
+  /* نطق أول */
+  utter(word, 0.65, 1.10, ()=>{
+    /* توقف ثم نطق ثانٍ أبطأ قليلاً */
+    setTimeout(()=> utter(word, 0.60, 1.10), 750);
+  });
+}
+
+/* ── النطق العام ── */
+function speak(text){
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  utter(text, 0.70, 1.08);
+}
+
+function nextLetter(){ cur++; cur>=DATA.length ? showFinal() : showCur(); }
+
+function showFinal(){
+  document.getElementById('mainCard').style.display='none';
+  document.getElementById('finalScreen').style.display='flex';
+  const e = scores.filter(Boolean).length;
+  const total = DATA.length;
+  const pct = e / total;
+
+  let trophy, msgText, speakText;
+
+  if(e === total){
+    /* 28/28 — إتقان تام */
+    trophy    = '🏆';
+    msgText   = `أحسنتِ! حصلتِ على جميع النجوم ${ar(total)} / ${ar(total)} ⭐`;
+    speakText = `أحسنتِ يا نجمة! حصلتِ على جميع النجوم. أنتِ بطلة رائعة!`;
+
+  } else if(pct >= 0.75){
+    /* 21–27 — ممتاز */
+    trophy    = '🌟';
+    msgText   = `ممتاز! حصلتِ على ${ar(e)} نجمة من ${ar(total)} ⭐`;
+    speakText = `ممتاز! حصلتِ على ${e} نجمة. أنتِ ذكية جداً!`;
+
+  } else if(pct >= 0.50){
+    /* 14–20 — جيد جداً */
+    trophy    = '😊';
+    msgText   = `جيد جداً! حصلتِ على ${ar(e)} نجمة من ${ar(total)} ⭐ واصِلي!`;
+    speakText = `جيد جداً! حصلتِ على ${e} نجمة. واصِلي التعلُّم!`;
+
+  } else {
+    /* أقل من 14 — تشجيع دافئ بدون سلبية */
+    trophy    = '💪';
+    msgText   = `أحسنتِ المحاولة! حصلتِ على ${ar(e)} نجمة من ${ar(total)} ⭐ حاوِلي مرّةً أخرى!`;
+    speakText = `أحسنتِ يا حبيبتي! حصلتِ على ${e} نجمة. حاوِلي مرّة أخرى وستحصلين على أكثر!`;
+  }
+
+  document.querySelector('#finalScreen .trophy').textContent = trophy;
+  document.getElementById('finalSub').textContent = msgText;
+  document.getElementById('finalStars').innerHTML =
+    scores.map(s=>`<div class="sd ${s?'done':''}">${s?'⭐':'○'}</div>`).join('');
+  speak(speakText);
+}
+
+function restart(){
+  cur=0; scores=new Array(DATA.length).fill(false);
+  document.getElementById('finalScreen').style.display='none';
+  document.getElementById('mainCard').style.display='flex';
+  showCur();
+}
+
+function updateStars(){
+  document.getElementById('starsRow').innerHTML=DATA.map((d,i)=>
+    `<div class="sd ${scores[i]?'done':''} ${i===cur&&!scores[i]?'now':''}">${scores[i]?'⭐':d.l}</div>`
+  ).join('');
+}
+
+function animEmoji(cls){
+  const em=document.getElementById('eMoji');
+  em.className='emoji-main'; void em.offsetWidth; em.classList.add(cls);
+}
+
+function setMsg(t,tp){
+  const el=document.getElementById('msgBox');
+  el.textContent=t; el.className='msg '+tp;
+}
+
+function confetti(){
+  const card=document.getElementById('mainCard');
+  for(let i=0;i<24;i++){
+    const p=document.createElement('div'); p.className='conf';
+    p.style.cssText=
+      `left:${12+Math.random()*76}%;top:${18+Math.random()*44}%;`+
+      `background:${CLR[Math.floor(Math.random()*CLR.length)]};`+
+      `width:${7+Math.random()*8}px;height:${7+Math.random()*8}px;`+
+      `border-radius:${Math.random()>.5?'50%':'4px'};`+
+      `animation:confFall ${.5+Math.random()*.85}s ease forwards;`+
+      `animation-delay:${Math.random()*.35}s`;
+    card.appendChild(p); setTimeout(()=>p.remove(),1800);
+  }
+}
+
+window.onload=()=>{ initMic(); showCur(); };
+</script>
+</body>
+</html>
